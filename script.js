@@ -1,81 +1,35 @@
-const btnEl = document.getElementById("btn");
-const stopBtn = document.getElementById("stop");
-const birthdayEl = document.getElementById("birthday");
-const resultEl = document.getElementById("result");
-const updatedEl = document.getElementById("updated");
+function calculateBMI() {
+    const height = document.getElementById('height').value;
+    const weight = document.getElementById('weight').value;
 
-let intervalId = null;
+    if (height === '' || weight === '') {
+        alert('Please enter both height and weight');
+        return;
+    }
 
-function pad(n){return n<10? '0'+n : n}
+    const heightInMeters = height / 100;
+    const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
 
-function getPreciseAge(birthdayValue){
-  const now = new Date();
-  const b = new Date(birthdayValue);
-  if (isNaN(b)) return null;
-  if (b > now) return {future:true};
+    document.getElementById('bmi-result').innerText = bmi;
+    let message = '';
 
-  let years = now.getFullYear() - b.getFullYear();
-  let months = now.getMonth() - b.getMonth();
-  let days = now.getDate() - b.getDate();
-
-  if (days < 0) {
-    const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-    days += prevMonth.getDate();
-    months -= 1;
-  }
-
-  if (months < 0) {
-    months += 12;
-    years -= 1;
-  }
-
-  return {years, months, days};
+    if (bmi < 18.5) {
+    message = 'You are underweight.';
+} else if (bmi >= 18.5 && bmi <= 24.9) {
+    message = 'You have a normal weight.';
+} else if (bmi >= 25 && bmi <= 29.9) {
+    message = 'You are overweight.';
+} else {
+    message = 'You are obese.';
 }
 
-function renderAge() {
-  const birthdayValue = birthdayEl.value;
-  if (!birthdayValue) {
-    alert('Please select your birth date');
-    return;
-  }
 
-  const age = getPreciseAge(birthdayValue);
-  if (!age) {
-    resultEl.innerText = 'Invalid date';
-    return;
-  }
-  if (age.future) {
-    resultEl.innerText = 'You have selected a future date';
-    return;
-  }
-
-  const yLabel = age.years === 1 ? 'year' : 'years';
-  const mLabel = age.months === 1 ? 'month' : 'months';
-  const dLabel = age.days === 1 ? 'day' : 'days';
-
-  resultEl.innerText = `${age.years} ${yLabel}, ${age.months} ${mLabel}, ${age.days} ${dLabel} old`;
-
-  const t = new Date();
-  updatedEl.innerText = `Last updated: ${pad(t.getHours())}:${pad(t.getMinutes())}:${pad(t.getSeconds())}`;
+    document.getElementById('bmi-message').innerText = message;
 }
 
-function startLive() {
-  if (!birthdayEl.value) { alert('Please select your birth date'); return; }
-  renderAge();
-  if (intervalId) clearInterval(intervalId);
-  intervalId = setInterval(renderAge, 1000);
-  stopBtn.disabled = false;
+function clearFields() {
+    document.getElementById('height').value = '';
+    document.getElementById('weight').value = '';
+    document.getElementById('bmi-result').innerText = '';
+    document.getElementById('bmi-message').innerText = '';
 }
-
-function stopLive(){
-  if (intervalId) { clearInterval(intervalId); intervalId = null; }
-  stopBtn.disabled = true;
-  updatedEl.innerText = 'Live update stopped';
-}
-
-btnEl.addEventListener('click', startLive);
-stopBtn.addEventListener('click', stopLive);
-birthdayEl.addEventListener('change', ()=>{ if (intervalId) { startLive(); } });
-
-// initialize
-stopBtn.disabled = true;

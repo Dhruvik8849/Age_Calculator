@@ -2,26 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Age Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>BMI Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Age Calculator</h1>
-        <div class="form">
-            <label for="birthday">Enter your date of birth</label>
-            <input type="date" id="birthday" name="birthday">
+    <div class="container-card">
+        <h1 class="title">BMI Calculator</h1>
 
-            <div class="controls">
-              <button id="btn">Calculate Age</button>
-              <button id="stop">Stop Live Update</button>
-            </div>
+        <div class="input-box">
+            <label>Height (cm):</label>
+            <input type="number" id="height" placeholder="Enter your height">
+        </div>
 
-            <p id="result">Your age will appear here</p>
-            <p id="updated" class="muted"></p>
+        <div class="input-box">
+            <label>Weight (kg):</label>
+            <input type="number" id="weight" placeholder="Enter your weight">
+        </div>
+
+        <button onclick="calculateBMI()" class="btn-calc">Calculate BMI</button>
+        <button onclick="clearFields()" class="btn-clear">Clear</button>
+
+        <div class="result-area">
+            <h2>Your BMI is: <span id="bmi-result"></span></h2>
+            <p id="bmi-message"></p>
         </div>
     </div>
 
